@@ -1,42 +1,101 @@
+
 #include <SPI.h>
-#include <MFRC522.h> 
+#include <MFRC522.h>
 
-#define RST_PIN         9          // Configurable, see typical pin layout above
-#define SS_PIN          10         // Configurable, see typical pin layout above
+#define SS_PIN 10
+#define RST_PIN 9
+MFRC522 mfrc522(SS_PIN, RST_PIN); // Create MFRC522 instance.
+boolean successfullyReadtheFirstCard = false;
 
-#define LED_BUILTIN 4 // Configurable, set LED pin
+boolean card1Read = false;
+boolean card2Read = false;
+boolean card3Read = false;
+boolean bone1Read = false;
+boolean bone2Read = false;
+boolean bone3Read = false;
 
-MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance
+unsigned long LED1OnTimestamp = 0;
+const int LED1Pin = 3;
 
-void setup() {
-  // initialize digital pin LED_BUILTIN as an output.
-  pinMode(LED_BUILTIN, OUTPUT);
+const int LEDTimeLimit = 3000;
 
-  Serial.begin(9600);   // Initialize serial communications with the PC
-  while (!Serial);    // Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
-  SPI.begin();      // Init SPI bus
-  mfrc522.PCD_Init();   // Init MFRC522
-  delay(4);       // Optional delay. Some board do need more time after init to be ready, see Readme
-  mfrc522.PCD_DumpVersionToSerial();  // Show details of PCD - MFRC522 Card Reader details
-  Serial.println(F("Scan PICC to see UID, SAK, type, and data blocks..."));
+// this function checks to see if there is a card to be read (true or false)
+boolean thereIsACard()
+{
+  // if there's a card and it can be read...
+  if (mfrc522.PICC_IsNewCardPresent() && mfrc522.PICC_ReadCardSerial())
+  {
+    return true;
+  } else { // no card was present or it couldn't be read
+    return false;
+  }
 }
 
-void loop() {
-  // Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
-  if ( ! mfrc522.PICC_IsNewCardPresent()) {
-    return;
+// this function returns the uppercase ID of the card being read, as a String
+String returnCardID()
+{
+  String content = "";
+  for (byte i = 0; i < mfrc522.uid.size; i++)
+  {
+    content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
+    content.concat(String(mfrc522.uid.uidByte[i], HEX));
   }
+  content.toUpperCase();
+  return content.substring(1);
+}
 
-  // Select one of the cards
-  if ( ! mfrc522.PICC_ReadCardSerial()) {
-    return;
+void turnOffOldLEDs() {
+  if (millis() - LED1OnTimestamp >= LEDTimeLimit) {
+    digitalWrite(LED1Pin, LOW);
   }
+  /*
+  if (millis() - LED2OnTimestamp >= LEDTimeLimit) {
+    digitalWrite(LED2Pin, LOW);
+  }
+  */
+}
 
-  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-  delay(1000);                       // wait for a second
-  digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
-  delay(1000);                       // wait for a second
+void setup()
+{
+  pinMode(LED1Pin, OUTPUT);
+  Serial.begin(9600); // Initiate a serial communication
+  SPI.begin();        // Initiate  SPI bus
+  mfrc522.PCD_Init(); // Initiate MFRC522
+  Serial.println("Ready");
+}
 
-  // Dump debug info about the card; PICC_HaltA() is automatically called
-  mfrc522.PICC_DumpToSerial(&(mfrc522.uid));
+void loop()
+{
+  // skip the rest of the loop if there isn't a card to read
+  if (thereIsACard() == false)
+    return;
+
+  // read the ID of the card into the "cardID" variable
+  String cardID = returnCardID();
+
+  //Serial.print("x");
+  //Serial.print(cardID);
+  //Serial.println("x");
+  
+  if (cardID == "74 ED DB 03" && card1Read ==false) {
+    card1Read = true;
+    Serial.println("Read Card1!");
+  }
+  else if (cardID == "A1 21 13 1D" && card2Read == false && card1Read == true) {
+    card2Read = true;
+    Serial.println("Read Card2!");
+ }
+  // else if (cardID == "74 67 0E 04" && card3Read == false) {
+  //   card3Read = true;
+  //   Serial.println("Read Card3!");
+  // }
+
+  // if (cardID == "" && card2Read == true)
+  // {
+  //   Serial.println("card 1 was read, followed by card A!");
+  //   digitalWrite(LED1Pin, HIGH);
+  //   LED1OnTimestamp = millis();
+  // }
+
+  // //turnOffOldLEDs();
 }
