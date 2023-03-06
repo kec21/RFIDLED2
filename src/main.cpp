@@ -27,8 +27,28 @@ boolean bone3Read = false;
 
 unsigned long greenLEDDuration = 500;
 unsigned long whiteLEDDuration = 3000;
+
 unsigned long greenLEDTurnedOnTime = 0;
+unsigned long whiteLED1TurnedOnTime = 0;
+unsigned long whiteLED2TurnedOnTime = 0;
+unsigned long whiteLED3TurnedOnTime = 0;
+unsigned long whiteLED4TurnedOnTime = 0;
+unsigned long whiteLED5TurnedOnTime = 0;
+unsigned long whiteLED6TurnedOnTime = 0;
+unsigned long whiteLED7TurnedOnTime = 0;
+unsigned long whiteLED8TurnedOnTime = 0;
+unsigned long whiteLED9TurnedOnTime = 0;
+
 boolean greenLEDIsOn = false;
+boolean whiteLED1IsOn = false;
+boolean whiteLED2IsOn = false;
+boolean whiteLED3IsOn = false;
+boolean whiteLED4IsOn = false;
+boolean whiteLED5IsOn = false;
+boolean whiteLED6IsOn = false;
+boolean whiteLED7IsOn = false;
+boolean whiteLED8IsOn = false;
+boolean whiteLED9IsOn = false;
 
 String card1ID = "74 ED D8 03";
 String card2ID = "E4 BD D1 03";
@@ -113,4 +133,22 @@ void loop()
     digitalWrite(GREENLEDPIN, LOW);
     greenLEDIsOn = false;
   }
-}
+
+  //check the bones
+  if(readID.equals(bone1ID)) {
+    if(card1Read) {
+      digitalWrite(WHITELED1PIN, HIGH);
+      whiteLED1IsOn = true;
+      whiteLED1TurnedOnTime = millis();
+    }
+    if(card2Read) {
+      digitalWrite(WHITELED4PIN, HIGH);
+      whiteLED4IsOn = true;
+      whiteLED4TurnedOnTime = millis();
+    }
+    if(card3Read) {
+      digitalWrite(WHITELED7PIN, HIGH);
+      whiteLED7IsOn = true;
+      whiteLED7TurnedOnTime = millis();
+    }
+  }
