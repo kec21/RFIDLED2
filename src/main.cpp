@@ -7,6 +7,17 @@
 MFRC522 mfrc522(SS_PIN, RST_PIN); // Create MFRC522 instance.
 boolean successfullyReadtheFirstCard = false;
 
+#define GREENLEDPIN 13
+#define WHITELED1PIN
+#define WHITELED2PIN
+#define WHITELED3PIN
+#define WHITELED4PIN
+#define WHITELED5PIN
+#define WHITELED6PIN
+#define WHITELED7PIN
+#define WHITELED8PIN
+#define WHITELED9PIN 
+
 boolean card1Read = false;
 boolean card2Read = false;
 boolean card3Read = false;
@@ -14,10 +25,12 @@ boolean bone1Read = false;
 boolean bone2Read = false;
 boolean bone3Read = false;
 
-unsigned long LED1OnTimestamp = 0;
-const int LED1Pin = 3;
-
-const int LEDTimeLimit = 3000;
+String card1ID = "74 ED D8 03";
+String card2ID = "E4 BD D1 03";
+String card3ID = "74 67 0E 04";
+String bone1ID = "A1 21 13 1D";
+String bone2ID = "91 D4 35 1D";
+String bone3ID = "A1 SB EE 1D";
 
 // this function checks to see if there is a card to be read (true or false)
 boolean thereIsACard()
