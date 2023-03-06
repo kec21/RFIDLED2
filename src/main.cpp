@@ -25,6 +25,11 @@ boolean bone1Read = false;
 boolean bone2Read = false;
 boolean bone3Read = false;
 
+unsigned long greenLEDDuration = 500;
+unsigned long whiteLEDDuration = 3000;
+unsigned long greenLEDTurnedOnTime = 0;
+boolean greenLEDIsOn = false;
+
 String card1ID = "74 ED D8 03";
 String card2ID = "E4 BD D1 03";
 String card3ID = "74 67 0E 04";
@@ -57,20 +62,19 @@ String returnCardID()
   return content.substring(1);
 }
 
-void turnOffOldLEDs() {
-  if (millis() - LED1OnTimestamp >= LEDTimeLimit) {
-    digitalWrite(LED1Pin, LOW);
-  }
-  /*
-  if (millis() - LED2OnTimestamp >= LEDTimeLimit) {
-    digitalWrite(LED2Pin, LOW);
-  }
-  */
-}
-
 void setup()
 {
-  pinMode(LED1Pin, OUTPUT);
+  pinMode(GREENLEDPIN, OUTPUT);
+  pinMode(WHITELED1PIN, OUTPUT);
+  pinMode(WHITELED2PIN, OUTPUT);
+  pinMode(WHITELED3PIN, OUTPUT);
+  pinMode(WHITELED4PIN, OUTPUT);
+  pinMode(WHITELED5PIN, OUTPUT);
+  pinMode(WHITELED6PIN, OUTPUT);
+  pinMode(WHITELED7PIN, OUTPUT);
+  pinMode(WHITELED8PIN, OUTPUT);
+  pinMode(WHITELED9PIN, OUTPUT);
+
   Serial.begin(9600); // Initiate a serial communication
   SPI.begin();        // Initiate  SPI bus
   mfrc522.PCD_Init(); // Initiate MFRC522
@@ -80,35 +84,33 @@ void setup()
 void loop()
 {
   // skip the rest of the loop if there isn't a card to read
-  if (thereIsACard() == false)
-    return;
+  if (thereIsACard() == false) return;
 
   // read the ID of the card into the "cardID" variable
-  String cardID = returnCardID();
+  String readID = returnCardID();
 
-  //Serial.print("x");
-  //Serial.print(cardID);
-  //Serial.println("x");
-  
-  if (cardID == "74 ED DB 03" && card1Read ==false) {
+  //deal with reading CARDS
+  if (readID.equals(card1ID)) {
     card1Read = true;
-    Serial.println("Read Card1!");
+    digitalWrite(GREENLEDPIN,HIGH);
+    greenLEDIsOn = true;
+    greenLEDTurnedOnTime = millis();
   }
-  else if (cardID == "A1 21 13 1D" && card2Read == false && card1Read == true) {
+   if (readID.equals(card2ID)) {
     card2Read = true;
-    Serial.println("Read Card2!");
- }
-  // else if (cardID == "74 67 0E 04" && card3Read == false) {
-  //   card3Read = true;
-  //   Serial.println("Read Card3!");
-  // }
-
-  // if (cardID == "" && card2Read == true)
-  // {
-  //   Serial.println("card 1 was read, followed by card A!");
-  //   digitalWrite(LED1Pin, HIGH);
-  //   LED1OnTimestamp = millis();
-  // }
-
-  // //turnOffOldLEDs();
+    digitalWrite(GREENLEDPIN,HIGH);
+    greenLEDIsOn = true;
+    greenLEDTurnedOnTime = millis();
+  }
+   if (readID.equals(card3ID)) {
+    card3Read = true;
+    digitalWrite(GREENLEDPIN,HIGH);
+    greenLEDIsOn = true;
+    greenLEDTurnedOnTime = millis();
+  }
+  //TURN OFF LED IF NECESSARY
+  if(greenLEDIsOn && millis() - greenLEDTurnedOnTime >= greenLEDDuration) {
+    digitalWrite(GREENLEDPIN, LOW);
+    greenLEDIsOn = false;
+  }
 }
