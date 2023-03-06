@@ -1,4 +1,3 @@
-
 #include <SPI.h>
 #include <MFRC522.h>
 
@@ -8,15 +7,15 @@ MFRC522 mfrc522(SS_PIN, RST_PIN); // Create MFRC522 instance.
 boolean successfullyReadtheFirstCard = false;
 
 #define GREENLEDPIN 13
-#define WHITELED1PIN 11
-#define WHITELED2PIN 12
-#define WHITELED3PIN 10
-#define WHITELED4PIN 9
-#define WHITELED5PIN 8
-#define WHITELED6PIN 7
-#define WHITELED7PIN 6
-#define WHITELED8PIN 5
-#define WHITELED9PIN 2
+#define WHITELED1PIN 3
+#define WHITELED2PIN 4
+#define WHITELED3PIN 5
+#define WHITELED4PIN 6
+#define WHITELED5PIN 7
+#define WHITELED6PIN 8
+#define WHITELED7PIN 9
+#define WHITELED8PIN 11
+#define WHITELED9PIN 12
 
 boolean card1Read = false;
 boolean card2Read = false;
@@ -50,12 +49,12 @@ boolean whiteLED7IsOn = false;
 boolean whiteLED8IsOn = false;
 boolean whiteLED9IsOn = false;
 
-String card1ID = "74 ED D8 03";
-String card2ID = "E4 BD D1 03";
-String card3ID = "74 67 0E 04";
-String bone1ID = "A1 21 13 1D";
-String bone2ID = "91 D4 35 1D";
-String bone3ID = "A1 SB EE 1D";
+String card1ID = "74 ED DB 03";
+String card2ID = "74 ED DB 04";
+String card3ID = "74 ED DB 05";
+String bone1ID = "74 ED DA 03";
+String bone2ID = "74 ED DC 04";
+String bone3ID = "74 ED DD 05";
 
 // this function checks to see if there is a card to be read (true or false)
 boolean thereIsACard()
@@ -109,86 +108,87 @@ void loop()
   // read the ID of the card into the "cardID" variable
   String readID = returnCardID();
 
-  //deal with reading CARDS
+  // deal with reading CARDs
   if (readID.equals(card1ID)) {
     card1Read = true;
     digitalWrite(GREENLEDPIN,HIGH);
     greenLEDIsOn = true;
     greenLEDTurnedOnTime = millis();
   }
-   if (readID.equals(card2ID)) {
+  if (readID.equals(card2ID)) {
     card2Read = true;
     digitalWrite(GREENLEDPIN,HIGH);
     greenLEDIsOn = true;
     greenLEDTurnedOnTime = millis();
   }
-   if (readID.equals(card3ID)) {
+  if (readID.equals(card3ID)) {
     card3Read = true;
     digitalWrite(GREENLEDPIN,HIGH);
     greenLEDIsOn = true;
     greenLEDTurnedOnTime = millis();
   }
-  //TURN OFF LED IF NECESSARY
-  if(greenLEDIsOn && millis() - greenLEDTurnedOnTime >= greenLEDDuration) {
+
+  // turn off green LED if necessary
+  if (greenLEDIsOn && millis() - greenLEDTurnedOnTime >= greenLEDDuration) {
     digitalWrite(GREENLEDPIN, LOW);
     greenLEDIsOn = false;
   }
 
-  //check the bones
-  if(readID.equals(bone1ID)) { //bone1
-    if(card1Read) {
+  // check the bones
+  if (readID.equals(bone1ID)) { // bone 1
+    if (card1Read) {
       digitalWrite(WHITELED1PIN, HIGH);
       whiteLED1IsOn = true;
       whiteLED1TurnedOnTime = millis();
       card1Read = false;
     }
-    if(card2Read) {
+    if (card2Read) {
       digitalWrite(WHITELED4PIN, HIGH);
       whiteLED4IsOn = true;
       whiteLED4TurnedOnTime = millis();
       card2Read = false;
     }
-    if(card3Read) {
+    if (card3Read) {
       digitalWrite(WHITELED7PIN, HIGH);
       whiteLED7IsOn = true;
       whiteLED7TurnedOnTime = millis();
       card3Read = false;
     }
   }
-  if(readID.equals(bone2ID)) { //bone2
-    if(card1Read) {
+  if (readID.equals(bone2ID)) { // bone 2
+    if (card1Read) {
       digitalWrite(WHITELED2PIN, HIGH);
       whiteLED2IsOn = true;
       whiteLED2TurnedOnTime = millis();
       card1Read = false;
     }
-    if(card2Read) {
+    if (card2Read) {
       digitalWrite(WHITELED5PIN, HIGH);
       whiteLED5IsOn = true;
       whiteLED5TurnedOnTime = millis();
       card2Read = false;
     }
-    if(card3Read) {
+    if (card3Read) {
       digitalWrite(WHITELED8PIN, HIGH);
       whiteLED8IsOn = true;
       whiteLED8TurnedOnTime = millis();
       card3Read = false;
     }
   }
-  if(readID.equals(bone3ID)) { //bone3
-    if(card1Read) {
+  if (readID.equals(bone3ID)) { // bone 3
+    if (card1Read) {
       digitalWrite(WHITELED3PIN, HIGH);
       whiteLED3IsOn = true;
       whiteLED3TurnedOnTime = millis();
       card1Read = false;
     }
-    if(card2Read) {
+    if (card2Read) {
       digitalWrite(WHITELED6PIN, HIGH);
       whiteLED6IsOn = true;
       whiteLED6TurnedOnTime = millis();
       card2Read = false;
     }
-    if(card3Read) {
+    if (card3Read) {
       digitalWrite(WHITELED9PIN, HIGH);
       whiteLED9IsOn = true;
       whiteLED9TurnedOnTime = millis();
@@ -196,41 +196,43 @@ void loop()
     }
   }
 
-  //turn off white LEDs is necessary
-  if(whiteLED1IsOn && millis() - whiteLED1TurnedOnTime >= whiteLEDDuration) {
-    digitalWrite(WHITELED1, LOW);
+  // turn off any white LEDs if necessary
+  if (whiteLED1IsOn && millis() - whiteLED1TurnedOnTime >= whiteLEDDuration) {
+    digitalWrite(WHITELED1PIN, LOW);
     whiteLED1IsOn = false;
   }
-  if(whiteLED2IsOn && millis() - whiteLED2TurnedOnTime >= whiteLEDDuration) {
-    digitalWrite(WHITELED2, LOW);
+  if (whiteLED2IsOn && millis() - whiteLED2TurnedOnTime >= whiteLEDDuration) {
+    digitalWrite(WHITELED2PIN, LOW);
     whiteLED2IsOn = false;
   }
-  if(whiteLED3IsOn && millis() - whiteLED3TurnedOnTime >= whiteLEDDuration) {
-    digitalWrite(WHITELED3, LOW);
+  if (whiteLED3IsOn && millis() - whiteLED3TurnedOnTime >= whiteLEDDuration) {
+    digitalWrite(WHITELED3PIN, LOW);
     whiteLED3IsOn = false;
   }
-  if(whiteLED4IsOn && millis() - whiteLED4TurnedOnTime >= whiteLEDDuration) {
-    digitalWrite(WHITELED4, LOW);
+  if (whiteLED4IsOn && millis() - whiteLED4TurnedOnTime >= whiteLEDDuration) {
+    digitalWrite(WHITELED4PIN, LOW);
     whiteLED4IsOn = false;
   }
-  if(whiteLED5IsOn && millis() - whiteLED5TurnedOnTime >= whiteLEDDuration) {
-    digitalWrite(WHITELED5, LOW);
+  if (whiteLED5IsOn && millis() - whiteLED5TurnedOnTime >= whiteLEDDuration) {
+    digitalWrite(WHITELED5PIN, LOW);
     whiteLED5IsOn = false;
   }
-  if(whiteLED6IsOn && millis() - whiteLED6TurnedOnTime >= whiteLEDDuration) {
-    digitalWrite(WHITELED6, LOW);
+  if (whiteLED6IsOn && millis() - whiteLED6TurnedOnTime >= whiteLEDDuration) {
+    digitalWrite(WHITELED6PIN, LOW);
     whiteLED6IsOn = false;
   }
-  if(whiteLED7IsOn && millis() - whiteLED7TurnedOnTime >= whiteLEDDuration) {
-    digitalWrite(WHITELED7, LOW);
+  if (whiteLED7IsOn && millis() - whiteLED7TurnedOnTime >= whiteLEDDuration) {
+    digitalWrite(WHITELED7PIN, LOW);
     whiteLED7IsOn = false;
   }
-  if(whiteLED8IsOn && millis() - whiteLED8TurnedOnTime >= whiteLEDDuration) {
-    digitalWrite(WHITELED8, LOW);
+  if (whiteLED8IsOn && millis() - whiteLED8TurnedOnTime >= whiteLEDDuration) {
+    digitalWrite(WHITELED8PIN, LOW);
     whiteLED8IsOn = false;
   }
-  if(whiteLED9IsOn && millis() - whiteLED9TurnedOnTime >= whiteLEDDuration) {
-    digitalWrite(WHITELED9, LOW);
+  if (whiteLED9IsOn && millis() - whiteLED9TurnedOnTime >= whiteLEDDuration) {
+    digitalWrite(WHITELED9PIN, LOW);
     whiteLED9IsOn = false;
   }
+
+
 }
