@@ -8,15 +8,15 @@ MFRC522 mfrc522(SS_PIN, RST_PIN); // Create MFRC522 instance.
 boolean successfullyReadtheFirstCard = false;
 
 #define GREENLEDPIN 13
-#define WHITELED1PIN
-#define WHITELED2PIN
-#define WHITELED3PIN
-#define WHITELED4PIN
-#define WHITELED5PIN
-#define WHITELED6PIN
-#define WHITELED7PIN
-#define WHITELED8PIN
-#define WHITELED9PIN 
+#define WHITELED1PIN 11
+#define WHITELED2PIN 12
+#define WHITELED3PIN 10
+#define WHITELED4PIN 9
+#define WHITELED5PIN 8
+#define WHITELED6PIN 7
+#define WHITELED7PIN 6
+#define WHITELED8PIN 5
+#define WHITELED9PIN 2
 
 boolean card1Read = false;
 boolean card2Read = false;
@@ -135,20 +135,102 @@ void loop()
   }
 
   //check the bones
-  if(readID.equals(bone1ID)) {
+  if(readID.equals(bone1ID)) { //bone1
     if(card1Read) {
       digitalWrite(WHITELED1PIN, HIGH);
       whiteLED1IsOn = true;
       whiteLED1TurnedOnTime = millis();
+      card1Read = false;
     }
     if(card2Read) {
       digitalWrite(WHITELED4PIN, HIGH);
       whiteLED4IsOn = true;
       whiteLED4TurnedOnTime = millis();
+      card2Read = false;
     }
     if(card3Read) {
       digitalWrite(WHITELED7PIN, HIGH);
       whiteLED7IsOn = true;
       whiteLED7TurnedOnTime = millis();
+      card3Read = false;
     }
   }
+  if(readID.equals(bone2ID)) { //bone2
+    if(card1Read) {
+      digitalWrite(WHITELED2PIN, HIGH);
+      whiteLED2IsOn = true;
+      whiteLED2TurnedOnTime = millis();
+      card1Read = false;
+    }
+    if(card2Read) {
+      digitalWrite(WHITELED5PIN, HIGH);
+      whiteLED5IsOn = true;
+      whiteLED5TurnedOnTime = millis();
+      card2Read = false;
+    }
+    if(card3Read) {
+      digitalWrite(WHITELED8PIN, HIGH);
+      whiteLED8IsOn = true;
+      whiteLED8TurnedOnTime = millis();
+      card3Read = false;
+    }
+  }
+  if(readID.equals(bone3ID)) { //bone3
+    if(card1Read) {
+      digitalWrite(WHITELED3PIN, HIGH);
+      whiteLED3IsOn = true;
+      whiteLED3TurnedOnTime = millis();
+      card1Read = false;
+    }
+    if(card2Read) {
+      digitalWrite(WHITELED6PIN, HIGH);
+      whiteLED6IsOn = true;
+      whiteLED6TurnedOnTime = millis();
+      card2Read = false;
+    }
+    if(card3Read) {
+      digitalWrite(WHITELED9PIN, HIGH);
+      whiteLED9IsOn = true;
+      whiteLED9TurnedOnTime = millis();
+      card3Read = false;
+    }
+  }
+
+  //turn off white LEDs is necessary
+  if(whiteLED1IsOn && millis() - whiteLED1TurnedOnTime >= whiteLEDDuration) {
+    digitalWrite(WHITELED1, LOW);
+    whiteLED1IsOn = false;
+  }
+  if(whiteLED2IsOn && millis() - whiteLED2TurnedOnTime >= whiteLEDDuration) {
+    digitalWrite(WHITELED2, LOW);
+    whiteLED2IsOn = false;
+  }
+  if(whiteLED3IsOn && millis() - whiteLED3TurnedOnTime >= whiteLEDDuration) {
+    digitalWrite(WHITELED3, LOW);
+    whiteLED3IsOn = false;
+  }
+  if(whiteLED4IsOn && millis() - whiteLED4TurnedOnTime >= whiteLEDDuration) {
+    digitalWrite(WHITELED4, LOW);
+    whiteLED4IsOn = false;
+  }
+  if(whiteLED5IsOn && millis() - whiteLED5TurnedOnTime >= whiteLEDDuration) {
+    digitalWrite(WHITELED5, LOW);
+    whiteLED5IsOn = false;
+  }
+  if(whiteLED6IsOn && millis() - whiteLED6TurnedOnTime >= whiteLEDDuration) {
+    digitalWrite(WHITELED6, LOW);
+    whiteLED6IsOn = false;
+  }
+  if(whiteLED7IsOn && millis() - whiteLED7TurnedOnTime >= whiteLEDDuration) {
+    digitalWrite(WHITELED7, LOW);
+    whiteLED7IsOn = false;
+  }
+  if(whiteLED8IsOn && millis() - whiteLED8TurnedOnTime >= whiteLEDDuration) {
+    digitalWrite(WHITELED8, LOW);
+    whiteLED8IsOn = false;
+  }
+  if(whiteLED9IsOn && millis() - whiteLED9TurnedOnTime >= whiteLEDDuration) {
+    digitalWrite(WHITELED9, LOW);
+    whiteLED9IsOn = false;
+  }
+}
