@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include <SPI.h>
 #include <MFRC522.h>
 
@@ -6,16 +7,16 @@
 MFRC522 mfrc522(SS_PIN, RST_PIN); // Create MFRC522 instance.
 boolean successfullyReadtheFirstCard = false;
 
-#define GREENLEDPIN 13
-#define WHITELED1PIN 3
-#define WHITELED2PIN 4
-#define WHITELED3PIN 5
-#define WHITELED4PIN 6
-#define WHITELED5PIN 7
-#define WHITELED6PIN 8
-#define WHITELED7PIN 9
-#define WHITELED8PIN 11
-#define WHITELED9PIN 12
+#define GREENLEDPIN 7
+#define WHITELED1PIN 2
+#define WHITELED2PIN 3
+#define WHITELED3PIN 4
+#define WHITELED4PIN 8
+#define WHITELED5PIN 6
+#define WHITELED6PIN 5
+#define WHITELED7PIN A3
+#define WHITELED8PIN A5
+#define WHITELED9PIN A4
 
 boolean card1Read = false;
 boolean card2Read = false;
@@ -25,7 +26,7 @@ boolean bone2Read = false;
 boolean bone3Read = false;
 
 unsigned long greenLEDDuration = 500;
-unsigned long whiteLEDDuration = 3000;
+unsigned long whiteLEDDuration = 500;
 
 unsigned long greenLEDTurnedOnTime = 0;
 unsigned long whiteLED1TurnedOnTime = 0;
@@ -50,11 +51,11 @@ boolean whiteLED8IsOn = false;
 boolean whiteLED9IsOn = false;
 
 String card1ID = "74 ED DB 03";
-String card2ID = "74 ED DB 04";
-String card3ID = "74 ED DB 05";
-String bone1ID = "74 ED DA 03";
-String bone2ID = "74 ED DC 04";
-String bone3ID = "74 ED DD 05";
+String card2ID = "E4 BD D1 03";
+String card3ID = "74 67 0E 04";
+String bone1ID = "A1 21 13 1D";
+String bone2ID = "91 D4 35 1D";
+String bone3ID = "A1 5B EE 1D";
 
 // this function checks to see if there is a card to be read (true or false)
 boolean thereIsACard()
